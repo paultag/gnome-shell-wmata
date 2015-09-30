@@ -18,11 +18,17 @@ const WMATARailProxy = new Lang.Class({
     },
 
     GetNextTrains: function(stops) {
-        return this.proxy.NextTrainsSync(stops)[0]
+        var ret = {"predictions": [], "error": null};
+        try {
+            ret.predictions = this.proxy.NextTrainsSync(stops)[0];
+        } catch (e) {
+            ret.error = e;
+        }
+        return ret;
     }
 });
 
 var railProxy = new WMATARailProxy();
-log(railProxy.GetNextTrains(["A03"]).map(function(e) {
+log(railProxy.GetNextTrains(["A03"]).predictions.map(function(e) {
     return e.cars + ", " + e.desitnation;
 }));
