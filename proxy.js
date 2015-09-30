@@ -25,6 +25,10 @@ const GLib = imports.gi.GLib;
 const WMATAInterface = '<node name="/org/anized/wmata"><interface name="org.anized.wmata.Rail"><method name="NextTrains"><arg type="as" direction="in"></arg><arg type="aa{ss}" direction="out"></arg></method></interface><interface name="org.freedesktop.DBus.Introspectable"><method name="Introspect"><arg name="out" type="s" direction="out"></arg></method></interface></node>';
 
 
+/**
+ * WMATARailProxy is a wrapper around wmatad's dbus server interface,
+ * allowing us to invoke methods on the API without having to do the API work
+ * ourselves. */
 const WMATARailProxy = new Lang.Class({
     Name: "WMATARailProxy",
 
@@ -37,6 +41,9 @@ const WMATARailProxy = new Lang.Class({
         );
     },
 
+    /**
+     * Get the next trains for the given stops (pass an array of station codes,
+     * such as ["A03"] for Dupont Circle). */
     GetNextTrains: function(stops) {
         var ret = {"predictions": [], "error": null};
         try {
